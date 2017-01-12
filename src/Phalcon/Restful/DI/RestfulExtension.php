@@ -59,19 +59,24 @@ class RestfulExtension
 		$dispatcher = $this->di->get(self::DISPATCHER);
 		$events = $dispatcher->getEventsManager() ?: $this->di->get(self::EVENTS_MANAGER);
 
-		$events->attach('dispatch:beforeDispatchLoop', function ($event, Dispatcher $dispatcher) {
+		$events->attach('dispatch:beforeDispatch', function ($event, Dispatcher $dispatcher) {
 			$controllerName = $dispatcher->getControllerClass();
 			$actionName = 'validate' . ucfirst($dispatcher->getActiveMethod());
 
 			try {
 				$reflection = new \ReflectionMethod($controllerName, $actionName);
 
-				/** @var \VideoRecruit\Phalcon\Restful\Input $input */
+				/** @var Restful\Input $input */
 				$input = $this->di->get(RestfulExtension::INPUT);
 
 				$dispatcher->callActionMethod($controllerName, $actionName, [$input]);
 
-				$input->validate();
+				try {
+					$input->validate();
+				} catch (Restful\ValidationException $e) {
+					$dispatcher->getEventsManager()->fire('dispatch:beforeException', $dispatcher, $e);
+					return FALSE;
+				}
 			} catch (\ReflectionException $e) {}
 		});
 
