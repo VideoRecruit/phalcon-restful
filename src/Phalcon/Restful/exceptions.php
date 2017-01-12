@@ -3,6 +3,7 @@
 namespace VideoRecruit\Phalcon\Restful;
 
 use Exception;
+use Phalcon\Validation\Message;
 use Phalcon\Validation\Message\Group;
 
 
@@ -105,17 +106,17 @@ class ValidationException extends \LogicException implements IException
 	 * @param int $code
 	 * @param Exception|NULL $previous
 	 */
-	public function __construct(Group $errors, $message = "", $code = 0, Exception $previous = NULL)
+	public function __construct(Group $errors, $message = 'Validation failed.', $code = 0, Exception $previous = NULL)
 	{
 		parent::__construct($message, $code, $previous);
 		$this->errors = $errors;
 	}
 
 	/**
-	 * @return Group
+	 * @return Message[]
 	 */
 	public function getErrors()
 	{
-		return $this->errors;
+		return iterator_to_array($this->errors);
 	}
 }
