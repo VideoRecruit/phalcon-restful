@@ -60,16 +60,18 @@ class RestfulExtension
 		$events = $dispatcher->getEventsManager() ?: $this->di->get(self::EVENTS_MANAGER);
 
 		$events->attach('dispatch:beforeDispatch', function ($event, Dispatcher $dispatcher) {
-			$controllerName = $dispatcher->getControllerClass();
-			$actionName = 'validate' . ucfirst($dispatcher->getActiveMethod());
+			$controllerClassName = $dispatcher->getControllerClass();
+			$actionName = 'validate' . ucfirst($dispatcher->getActionName());
 
 			try {
-				$reflection = new \ReflectionMethod($controllerName, $actionName);
+				$reflection = new \ReflectionMethod($controllerClassName, $actionName . $dispatcher->getActionSuffix());
 
 				/** @var Restful\Input $input */
 				$input = $this->di->get(RestfulExtension::INPUT);
 
-				$dispatcher->callActionMethod($controllerName, $actionName, [$input]);
+				$dispatcher->setActionName($actionName);
+				$dispatcher->setParam(0, $input);
+				$dispatcher->dispatch();
 
 				try {
 					$input->validate();
