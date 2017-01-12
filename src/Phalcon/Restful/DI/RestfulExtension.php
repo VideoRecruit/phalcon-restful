@@ -5,6 +5,8 @@ namespace VideoRecruit\Phalcon\Restful\DI;
 use Phalcon\DiInterface;
 use Phalcon\Events\Manager as EventManager;
 use Phalcon\Mvc\Dispatcher;
+use ReflectionException;
+use ReflectionMethod;
 use VideoRecruit\Phalcon\Restful;
 
 /**
@@ -64,7 +66,7 @@ class RestfulExtension
 			$actionName = 'validate' . ucfirst($dispatcher->getActionName());
 
 			try {
-				$reflection = new \ReflectionMethod($controllerClassName, $actionName . $dispatcher->getActionSuffix());
+				$reflection = new ReflectionMethod($controllerClassName, $actionName . $dispatcher->getActionSuffix());
 
 				/** @var Restful\Input $input */
 				$input = $this->di->get(RestfulExtension::INPUT);
@@ -87,7 +89,7 @@ class RestfulExtension
 
 					return FALSE;
 				}
-			} catch (\ReflectionException $e) {}
+			} catch (ReflectionException $e) {}
 		});
 
 		$dispatcher->setEventsManager($events);
