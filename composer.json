@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Videorecruit\\": "src/"
+            "VideoRecruit\\": "src/"
         },
         "classmap": [
             "src/Phalcon/Restful/exceptions.php"
