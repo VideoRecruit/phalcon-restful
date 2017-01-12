@@ -74,7 +74,15 @@ class RestfulExtension
 				try {
 					$input->validate();
 				} catch (Restful\ValidationException $e) {
-					$dispatcher->getEventsManager()->fire('dispatch:beforeException', $dispatcher, $e);
+					$eventsManager = $dispatcher->getEventsManager();
+					$eventsManager->fire('dispatch:beforeException', $dispatcher, $e);
+
+					$availableListeners = $eventsManager->getListeners('dispatch:beforeException');
+
+					if (count($availableListeners) === 0) {
+						throw $e;
+					}
+
 					return FALSE;
 				}
 			} catch (\ReflectionException $e) {}
