@@ -72,7 +72,6 @@ class RestfulExtension
 				$input = $this->di->get(RestfulExtension::INPUT);
 
 				$dispatcher->setActionName($actionName);
-				$dispatcher->setParam(0, $input);
 				$dispatcher->dispatch();
 
 				try {
