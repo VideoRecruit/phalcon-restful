@@ -1,0 +1,16 @@
+{
+    "name": "videorecruit/phalcon-restful",
+    "type": "library",
+    "description": "Phalcon REST library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lukas Tomek",
+            "email": "tomeklukas@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-phalcon": "*"
+    }
+}
