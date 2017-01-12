@@ -106,7 +106,7 @@ class ValidationException extends \LogicException implements IException
 	 * @param int $code
 	 * @param Exception|NULL $previous
 	 */
-	public function __construct(Group $errors, $message = 'Validation failed.', $code = 0, Exception $previous = NULL)
+	public function __construct(Group $errors, $message = 'Validation Failed', $code = 0, Exception $previous = NULL)
 	{
 		parent::__construct($message, $code, $previous);
 		$this->errors = $errors;
@@ -117,6 +117,15 @@ class ValidationException extends \LogicException implements IException
 	 */
 	public function getErrors()
 	{
-		return iterator_to_array($this->errors);
+		$errors = [];
+
+		foreach ($this->errors as $message) {
+			$errors[] = [
+				'field' => $message->getField(),
+				'message' => $message->getMessage(),
+			];
+		}
+
+		return $errors;
 	}
 }
