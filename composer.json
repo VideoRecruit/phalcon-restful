@@ -12,5 +12,13 @@
     "require": {
         "php": ">=5.4",
         "ext-phalcon": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Videorecruit\\": "src/"
+        },
+        "classmap": [
+            "src/Phalcon/Restful/exceptions.php"
+        ]
     }
 }
