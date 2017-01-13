@@ -88,6 +88,16 @@ class UnexpectedValueException extends \UnexpectedValueException implements IExc
 
 
 /**
+ * The exception is thrown when there is no available mapper for requested Content-Type.
+ */
+class MappingException extends InvalidStateException
+{
+
+}
+
+
+
+/**
  * The exception is thrown when
  */
 class ValidationException extends \LogicException implements IException

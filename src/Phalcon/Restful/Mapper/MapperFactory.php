@@ -2,6 +2,8 @@
 
 namespace VideoRecruit\Phalcon\Restful\Mapper;
 
+use VideoRecruit\Phalcon\Restful\MappingException;
+
 /**
  * Class MapperFactory
  *
@@ -41,11 +43,17 @@ class MapperFactory
 	/**
 	 * @param string $contentType
 	 * @return IMapper
+	 * @throws MappingException
 	 */
 	public function getMapper($contentType)
 	{
 		$contentType = explode(';', trim($contentType))[0];
+		$contentType = trim($contentType);
 
-		return $this->mappers[trim($contentType)];
+		if (!array_key_exists($contentType, $this->mappers)) {
+			throw new MappingException(sprintf('There is no mapper for Content-Type: %s.', $contentType));
+		}
+
+		return $this->mappers[$contentType];
 	}
 }
