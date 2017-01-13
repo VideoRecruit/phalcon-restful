@@ -141,14 +141,19 @@ class Input
 	private function parseRawData()
 	{
 		$body = trim($this->request->getRawBody());
+		$contentType = $this->request->getHeader('Content-Type');
 
-		if (empty($body)) {
+		if (empty($body) || empty($contentType)) {
 			return [];
 		}
 
-		$contentType = $this->request->getHeader('Content-Type');
 		$mapper = $this->mapperFactory->getMapper($contentType);
+		$result = $mapper->parse($body);
 
-		return $mapper->parse($body);
+		if (!is_array($result)) {
+			throw new UnexpectedValueException(sprintf('Invalid value returned by a mapper: %s. Array value was expected.', gettype($result)));
+		}
+
+		return $result;
 	}
 }
