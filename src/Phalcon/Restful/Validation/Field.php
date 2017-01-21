@@ -21,6 +21,11 @@ class Field
 	private $name;
 
 	/**
+	 * @var array
+	 */
+	private $rules = [];
+
+	/**
 	 * Field constructor.
 	 *
 	 * @param Validator $validator
@@ -48,7 +53,17 @@ class Field
 	 */
 	public function addRule($expression, $message = NULL, $argument = NULL)
 	{
-		$this->validator->addRule($this, $expression, $message, $argument);
+		$this->rules[] = $rule = new Rule($this, $expression, $message, $argument);
+		$this->validator->addRule($this, $rule);
+
 		return $this;
+	}
+
+	/**
+	 * @return Rule[]
+	 */
+	public function getRules()
+	{
+		return $this->rules;
 	}
 }
