@@ -12,6 +12,9 @@ use VideoRecruit\Phalcon\Restful\InvalidArgumentException;
  */
 class Rule
 {
+	const SIZE = 'maxSize';
+	const MIME_TYPE = 'allowedTypes';
+
 	/**
 	 * @var array
 	 */
@@ -39,6 +42,7 @@ class Rule
 		Validator::UUID => 'VideoRecruit\Phalcon\Restful\Validation\Uuid',
 		Validator::FLOAT => 'VideoRecruit\Phalcon\Restful\Validation\FloatNumber',
 		Validator::CALLBACK => 'VideoRecruit\Phalcon\Restful\Validation\Callback',
+		Validator::FILE => 'Phalcon\Validation\Validator\File',
 	];
 
 	/**
@@ -164,6 +168,21 @@ class Rule
 
 			case Validator::CALLBACK:
 				$options['callback'] = $this->argument;
+				break;
+
+			case Validator::FILE:
+				$options['messageEmpty'] = 'Field :field must be a file';
+
+				if (is_array($this->argument)) {
+					if (array_key_exists(self::SIZE, $this->argument)) {
+						$options[self::SIZE] = $this->argument[self::SIZE];
+					}
+
+					if (array_key_exists(self::MIME_TYPE, $this->argument)) {
+						$options[self::MIME_TYPE] = (array) $this->argument[self::MIME_TYPE];
+					}
+				}
+
 				break;
 		}
 

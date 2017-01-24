@@ -27,6 +27,7 @@ class Validator
 	const UUID = 'uuid';
 	const FLOAT = 'float';
 	const CALLBACK = 'callback';
+	const FILE = 'file';
 
 	/**
 	 * @var Field[]

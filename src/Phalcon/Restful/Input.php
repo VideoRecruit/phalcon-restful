@@ -132,7 +132,7 @@ class Input
 	 */
 	private function parseData()
 	{
-		return array_merge($_GET, $_POST, $this->parseRawData());
+		return array_merge($_GET, $_POST, $_FILES, $this->parseRawData());
 	}
 
 	/**
