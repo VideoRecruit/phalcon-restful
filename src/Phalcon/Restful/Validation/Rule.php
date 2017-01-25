@@ -122,6 +122,10 @@ class Rule
 		];
 
 		switch ($this->expression) {
+			case Validator::EQUAL:
+				$options['value'] = $this->argument;
+				break;
+
 			case Validator::MIN_LENGTH:
 				$options['min'] = $this->argument;
 				break;
