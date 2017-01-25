@@ -54,7 +54,7 @@ class Input
 	 */
 	public function field($name)
 	{
-		return $this->validator->field($name);
+		return $this->validator->field($name, $this->get($name));
 	}
 
 	/**
@@ -76,6 +76,13 @@ class Input
 	 */
 	public function getData()
 	{
+		// remove null values which are optional
+		foreach ($this->data as $key => $value) {
+			if ($value === NULL && !$this->field($key)->isRequired()) {
+				unset($this->data[$key]);
+			}
+		}
+
 		return $this->data;
 	}
 
@@ -85,7 +92,7 @@ class Input
 	 */
 	public function validate()
 	{
-		$this->validator->validate($this->getData());
+		$this->validator->validate();
 	}
 
 	/**

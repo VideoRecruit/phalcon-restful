@@ -117,13 +117,11 @@ class Rule
 	 */
 	private function getOptions()
 	{
-		$options = [];
+		$options = [
+			'allowEmpty' => !$this->field->isRequired() && $this->field->getValue() === NULL,
+		];
 
 		switch ($this->expression) {
-			case Validator::REQUIRED:
-				$options['allowEmpty'] = TRUE;
-				break;
-
 			case Validator::MIN_LENGTH:
 				$options['min'] = $this->argument;
 				break;

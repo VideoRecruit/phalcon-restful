@@ -49,12 +49,13 @@ class Validator
 
 	/**
 	 * @param string $name
+	 * @param mixed $value
 	 * @return Field
 	 */
-	public function field($name)
+	public function field($name, $value = NULL)
 	{
 		if (!array_key_exists($name, $this->fields)) {
-			$this->fields[$name] = new Field($this, $name);
+			$this->fields[$name] = new Field($this, $name, $value);
 		}
 
 		return $this->fields[$name];
@@ -73,13 +74,18 @@ class Validator
 	}
 
 	/**
-	 * @param array $data
+	 * Validate defined input over all fields and their rules.
+	 *
 	 * @return void
 	 * @throws ValidationException
 	 */
-	public function validate(array $data)
+	public function validate()
 	{
-		$errors = $this->validation->validate($data);
+		$errors = new Validation\Message\Group();
+
+		foreach ($this->fields as $field) {
+			$errors->appendMessages($field->validate());
+		}
 
 		if ($errors->count() !== 0) {
 			throw new ValidationException($errors);
