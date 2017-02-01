@@ -64,26 +64,28 @@ class Input
 	 */
 	public function get($name, $defaultValue = NULL)
 	{
-		if (array_key_exists($name, $this->data)) {
-			return $this->data[$name];
+		$data = $this->data;
+
+		foreach ($fieldParts = explode('.', $name) as $fieldName) {
+			if (!is_array($data) || !array_key_exists($fieldName, $data)) {
+				return $defaultValue;
+			}
+
+			$data = $data[$fieldName];
 		}
 
-		return $defaultValue;
+		return $data;
 	}
 
 	/**
+	 * Return all input data as an array.
+	 * This optimizes data structure and removes null values which are optional.
+	 *
 	 * @return array
 	 */
 	public function getData()
 	{
-		// remove null values which are optional
-		foreach ($this->data as $key => $value) {
-			if ($value === NULL && !$this->field($key)->isRequired()) {
-				unset($this->data[$key]);
-			}
-		}
-
-		return $this->data;
+		return $this->optimizeData($this->data);
 	}
 
 	/**
@@ -131,7 +133,7 @@ class Input
 	 */
 	public function __isset($name)
 	{
-		return array_key_exists($name, $this->data);
+		return $this->get($name) !== NULL;
 	}
 
 	/**
@@ -162,5 +164,33 @@ class Input
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param array $data
+	 * @param string $path
+	 * @return array
+	 */
+	private function optimizeData(array $data, $path = NULL)
+	{
+		foreach ($data as $key => &$value) {
+			$path = $path ? "$path.$key" : "$key";
+
+			if (is_array($value)) {
+				$value = $this->optimizeData($value, $path);
+
+				if (count($value) === 0) {
+					unset($data[$key]);
+				}
+
+				continue;
+			}
+
+			if ($value === NULL && !$this->field($path)->isRequired()) {
+				unset($data[$key]);
+			}
+		}
+
+		return $data;
 	}
 }
