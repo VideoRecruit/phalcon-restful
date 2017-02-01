@@ -28,6 +28,7 @@ class Validator
 	const FLOAT = 'float';
 	const CALLBACK = 'callback';
 	const FILE = 'file';
+	const IN = 'in';
 
 	/**
 	 * @var Field[]

@@ -43,6 +43,7 @@ class Rule
 		Validator::FLOAT => 'VideoRecruit\Phalcon\Restful\Validation\FloatNumber',
 		Validator::CALLBACK => 'VideoRecruit\Phalcon\Restful\Validation\Callback',
 		Validator::FILE => 'Phalcon\Validation\Validator\File',
+		Validator::IN => 'Phalcon\Validation\Validator\InclusionIn',
 	];
 
 	/**
@@ -185,6 +186,11 @@ class Rule
 					}
 				}
 
+				break;
+
+			case Validator::IN:
+				$options['domain'] = $this->argument;
+				$options['strict'] = TRUE;
 				break;
 		}
 
