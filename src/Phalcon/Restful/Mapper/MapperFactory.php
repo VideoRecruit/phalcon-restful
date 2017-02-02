@@ -13,6 +13,7 @@ class MapperFactory
 {
 	const JSON = 'application/json';
 	const URLENCODED = 'application/x-www-form-urlencoded';
+	const MULTIPART = 'multipart/form-data';
 
 	/**
 	 * @var array
@@ -26,6 +27,7 @@ class MapperFactory
 	{
 		$this->mappers[self::JSON] = new JsonMapper();
 		$this->mappers[self::URLENCODED] = new UrlencodedMapper();
+		$this->mappers[self::MULTIPART] = new MultipartMapper();
 	}
 
 	/**
