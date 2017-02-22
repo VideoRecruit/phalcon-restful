@@ -78,6 +78,33 @@ class Input
 	}
 
 	/**
+	 * @param string $name
+	 * @param mixed $value
+	 * @return self
+	 */
+	public function set($name, $value)
+	{
+		$data = &$this->data;
+		$iterator = 1;
+
+		$fieldParts = explode('.', $name);
+		$levels = count($fieldParts);
+
+		foreach ($fieldParts as $fieldName) {
+			if ($iterator === $levels) {
+				$data[$fieldName] = $value;
+				break;
+			}
+
+			$data[$fieldName] = [];
+			$data = &$data[$fieldName];
+			$iterator++;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Return all input data as an array.
 	 * This optimizes data structure and removes null values which are optional.
 	 *
@@ -86,6 +113,16 @@ class Input
 	public function getData()
 	{
 		return $this->optimizeData($this->data);
+	}
+
+	/**
+	 * @param array $data
+	 * @return self
+	 */
+	public function setData(array $data)
+	{
+		$this->data = $data;
+		return $this;
 	}
 
 	/**
@@ -122,9 +159,11 @@ class Input
 	/**
 	 * @param string $name
 	 * @param mixed $value
+	 * @return self
 	 */
 	public function __set($name, $value)
 	{
+		return $this->set($name, $value);
 	}
 
 	/**
