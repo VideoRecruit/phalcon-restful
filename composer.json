@@ -19,7 +19,7 @@
         },
         "classmap": [
             "src/Phalcon/Restful/exceptions.php"
-        ],
+        ]
     },
     "extra": {
         "branch-alias": {
