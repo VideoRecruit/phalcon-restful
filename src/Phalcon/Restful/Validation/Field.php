@@ -33,6 +33,11 @@ class Field
 	private $required = FALSE;
 
 	/**
+	 * @var string
+	 */
+	private $requiredMessage;
+
+	/**
 	 * @var Rule[]
 	 */
 	private $rules = [];
@@ -85,6 +90,7 @@ class Field
 	{
 		if ($expression === Validator::REQUIRED) {
 			$this->required = TRUE;
+			$this->requiredMessage = $message;
 		} else {
 			$this->rules[] = new Rule($this, $expression, $message, $argument);
 		}
@@ -111,7 +117,9 @@ class Field
 
 		if ($this->required && $this->value === NULL) {
 			$replacePairs = [':field' => $this->name];
-			$errors[] = new Validation\Message(strtr('Field :field is required', $replacePairs), $this->name, 'Required');
+			$msg = $this->requiredMessage ?: 'Field :field is required';
+
+			$errors[] = new Validation\Message(strtr($msg, $replacePairs), $this->name, 'Required');
 		}
 
 		$validation = new Validation();
